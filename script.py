@@ -311,7 +311,7 @@ def writeMetadataToAllImagesInFolder(folder):
         choice = input().strip().lower()
         if choice == 'y':
             for errFile in errorImages:
-                moveFileToSubfolder(errFile, "error_files")
+                moveFileToSubfolder(errFile, folder_path + "/error_files")
 
 
 if __name__ == "__main__":
