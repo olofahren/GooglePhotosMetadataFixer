@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 
 import pytz
 
@@ -40,3 +41,14 @@ def convertTimestampToExifTime(timestamp, formattedTimestamp):
     # Format the datetime object to EXIF time format (YYYY:MM:DD HH:MM:SS)
     exif_time = dt.strftime("%Y:%m:%d %H:%M:%S")
     return exif_time
+
+def getPhotoYearFromPhotoPath(file):
+    # Extract year from file path, assuming format like "Takeout/Photos/2022/09/09/photo.jpg"
+    parts = file.split(os.sep)
+    for part in parts:
+        if("Photos" in part):
+            subparts = part.split(" ")
+            for subpart in subparts:
+                if subpart.isdigit() and len(subpart) == 4:  # Check for 4-digit year
+                    return subpart
+    return None

@@ -5,7 +5,7 @@ import piexif
 import ffmpeg
 
 from .JSONFunctions import getMetadataFromJSONFile, getPhotoTakenTimeFormattedUTCFromJSON
-from .timeFunctions import convertTimestampToExifTime
+from .timeFunctions import convertTimestampToExifTime, getPhotoYearFromPhotoPath
 from .state import errorImages, imagesWithoutMetadataJson
 
 def readMetadataDatetimeFromImage(file):
@@ -62,9 +62,17 @@ def writeMetadataDatetimeToImage(file):
         # print("Image already has metadata:", file, ". Timestamp is", readMetadataDatetimeFromImage(file))
         return
     if(getMetadataFromJSONFile(file) is None):
-        print("Metadata JSON file not found for image file:",file,". Setting to 1970-01-01 00:00:00",)
-        exif_time = "1970:01:01 00:00:00"
         imagesWithoutMetadataJson.append(file)
+        
+        #Try fallback to get year from file path if possible
+        photoYearFromFilePath = getPhotoYearFromPhotoPath(file)
+
+        if(photoYearFromFilePath is not None):
+            # print("Extracted year from file path:", photoYearFromFilePath, "for file:", file)
+            exif_time = photoYearFromFilePath + ":01:01 00:00:00"
+        else:
+            print("Could not extract year from file path or JSON for file:", file, ". Using default 1970 for EXIF time.")
+            exif_time = "1970:01:01 00:00:00"
     else:
         exif_time = convertTimestampToExifTime( getMetadataFromJSONFile(file)["photoTakenTime"]["timestamp"], getPhotoTakenTimeFormattedUTCFromJSON(file))
 
