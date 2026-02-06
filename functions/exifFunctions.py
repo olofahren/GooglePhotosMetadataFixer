@@ -46,14 +46,17 @@ def writeEXIFTimeToImage(file, exif_time):
             pil_img.save(file, exif=exif_bytes)
             # print(f"Successfully added EXIF data to {file}")
         except Exception as e2:
-            print(f"Failed to add EXIF data using Pillow: {type(e2).__name__}: {e2}")
+            print(f"Failed to add EXIF data to file {file} using Pillow: {type(e2).__name__}: {e2}")
+            errorImages.append(file)
             return
     
     # Verify the write was successful
     try:
         writtenTime = readMetadataDatetimeFromImage(file)
         if(writtenTime != exif_time):
-            print("Error writing to image EXIF time. Written time:", writtenTime, "Expected time:", exif_time)
+            print("Error writing to image, ", file, "EXIF time. Written time:", writtenTime, "Expected time:", exif_time)
+            if file not in errorImages:
+                errorImages.append(file)
     except Exception:
         pass
 

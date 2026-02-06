@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import re
 
 import pytz
 
@@ -9,7 +10,7 @@ def moveFileToSubfolder(file, subfolder):
         os.makedirs(subfolder, exist_ok=True)
         new_path = os.path.join(subfolder, os.path.basename(file))
         os.rename(file, new_path)
-        print(f"Moved {file} to {new_path}")
+        # print(f"Moved {file} to {new_path}")
     except Exception as e:
         print(f"Error moving file {file} to subfolder {subfolder}: {e}")
 
@@ -41,3 +42,50 @@ def updateFileSystemTimestamp(file, timestamp_str):
         # print(f"Updated file system timestamp for {file} to {timestamp_str}")
     except Exception as e:
         print(f"Error updating file system timestamp for {file}: {e}")
+
+def deleteAllMetadataJsonFilesInFolder(folder_path):
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".json"):
+                json_file_path = os.path.join(root, file)
+                try:
+                    os.remove(json_file_path)
+                    # print(f"Deleted metadata JSON file: {json_file_path}")
+                except Exception as e:
+                    print(f"Error deleting JSON file {json_file_path}: {e}")
+
+def getAllJsonFilesInFolder(folder_path):
+    json_files = []
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".json"):
+                json_file_path = os.path.join(root, file)
+                json_files.append(json_file_path)
+    return json_files
+
+def extractAllJsonFileEndingsInFolder(folder_path):
+    jsonFiles = getAllJsonFilesInFolder(folder_path)
+    jsonFileEndings = set()
+    for jsonFile in jsonFiles:
+        filename = os.path.basename(jsonFile)
+        if filename.endswith(".json"):
+            #if there is a number in the filename before the .json extension, add ".json" if it is not already in the set
+            
+            # regex for all digits:
+            charsToCheckFor = re.compile(r'^[0-9]*$')
+            parts = filename.split(".")
+            segment = parts[-2]
+
+            if len(parts) <= 2:
+                if ".json" not in jsonFileEndings:
+                    jsonFileEndings.add(".json")
+                continue
+
+            if charsToCheckFor.fullmatch(segment):
+                if(".json" not in jsonFileEndings):
+                    jsonFileEndings.add(".json")
+            
+            ending = filename.split(".")[-2] + ".json"
+            jsonFileEndings.add(ending)
+
+    return jsonFileEndings   

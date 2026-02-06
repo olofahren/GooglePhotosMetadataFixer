@@ -2,16 +2,24 @@
 import os
 from functions.conversionFunctions import convertHEICtoJPEG
 from functions.exifFunctions import writeMetadataDatetimeToImage
-from functions.utilsFunctions import moveFileToSubfolder
+from functions.utilsFunctions import deleteAllMetadataJsonFilesInFolder, moveFileToSubfolder, extractAllJsonFileEndingsInFolder
 from functions.videoFunctions import writeMetadataDatetimeToVideo
 from functions.state import errorImages, imagesWithoutMetadataJson, incompatibleFileFormatImages, convertedImages
+import functions.state
 
 folder_path = "/home/olof/Downloads/TakeoutTests/takeout1"
 
 #Main call script
 def writeMetadataToAllImagesInFolder(folder):
 
-    #get number of files in folder
+    functions.state.candidates = extractAllJsonFileEndingsInFolder(folder)
+    
+    # print("Found JSON file endings in folder", folder, ":")
+    # for ending in functions.state.candidates:
+    #     print(ending , "\n")
+    # print("Press any key to continue...")
+    # input()
+
     numFiles = sum(len(files) for _, _, files in os.walk(folder))
     countFilesDone = 0
 
@@ -41,6 +49,7 @@ def writeMetadataToAllImagesInFolder(folder):
                 incompatibleFileFormatImages.append(filename)
     print("Done writing metadata to all images and videos in folder:", folder)
 
+# Handle post-processing and reporting after all files have been processed
     if(errorImages):
         print("\n\n\n\n")
         print("The following files had errors during processing:")
@@ -73,7 +82,9 @@ def writeMetadataToAllImagesInFolder(folder):
             for errFile in errorImages:
                 moveFileToSubfolder(errFile, folder_path + "/error_files")
             print("Moved error files to subfolder 'error_files'.")
-
+    
+    print("\n\n\n\n")
+    
     if(incompatibleFileFormatImages):
         print("Would you like to move the incompatible format files to a subfolder named 'incompatible_files'? (y/n)")
         choice = input().strip().lower()
@@ -81,7 +92,31 @@ def writeMetadataToAllImagesInFolder(folder):
             for errFile in incompatibleFileFormatImages:
                 moveFileToSubfolder(errFile, folder_path + "/incompatible_files")
             print("Moved incompatible format files to subfolder 'incompatible_files'.")
+    
+    print("\n\n\n\n")
+
+    print("Would you like to delete all metadata JSON files? (y/n)")
+    choice = input().strip().lower()
+    if choice == 'y':
+        print("This action cannot be undone. If you want to get them back, redownload the data from Google Takeout or extract the zip files again. \n Are you absolutely sure? (y/n)")
+        confirm = input().strip().lower()
+        if confirm == 'y':
+            deleteAllMetadataJsonFilesInFolder(folder_path)
+            print("Deleted all metadata JSON files in the folder.")
+
+    print("\n\n\n\n")
+    print("Summary: ")
+    print("Total files processed:", numFiles)
+    print("Files with errors:", len(errorImages))
+    print("Files without metadata JSON:", len(imagesWithoutMetadataJson))
+    print("Incompatible format files:", len(incompatibleFileFormatImages))
+    print("HEIC files converted to JPEG:", len(convertedImages))
+    print("\n")
+    print("Success rate:", round((numFiles - len(errorImages) - len(incompatibleFileFormatImages)) / numFiles * 100, 2), "%")
+    print("\n\n\n\n")
+
     print("All done! Exiting script.")
+
 
     
 writeMetadataToAllImagesInFolder(folder_path)
