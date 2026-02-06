@@ -4,9 +4,9 @@ from PIL import Image as PILImage
 import piexif
 import ffmpeg
 
-from JSONFunctions import getMetadataFromJSONFile, getPhotoTakenTimeFormattedUTCFromJSON
-from timeFunctions import convertTimestampToExifTime
-from state import errorImages, imagesWithoutMetadataJson
+from .JSONFunctions import getMetadataFromJSONFile, getPhotoTakenTimeFormattedUTCFromJSON
+from .timeFunctions import convertTimestampToExifTime
+from .state import errorImages, imagesWithoutMetadataJson
 
 def readMetadataDatetimeFromImage(file):
     img = Image(open(file, 'rb'))

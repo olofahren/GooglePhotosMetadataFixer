@@ -1,6 +1,6 @@
 # Video metadata section
 import ffmpeg
-from utilsFunctions import updateFileSystemTimestamp
+from .utilsFunctions import updateFileSystemTimestamp
 
 
 def getCreationTimeFromVideo(file):

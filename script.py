@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 import os
-from conversionFunctions import convertHEICtoJPEG
-from exifFunctions import writeMetadataDatetimeToImage
-from utilsFunctions import moveFileToSubfolder
-from videoFunctions import writeMetadataDatetimeToVideo
-from state import errorImages, imagesWithoutMetadataJson, incompatibleFileFormatImages, convertedImages
+from functions.conversionFunctions import convertHEICtoJPEG
+from functions.exifFunctions import writeMetadataDatetimeToImage
+from functions.utilsFunctions import moveFileToSubfolder
+from functions.videoFunctions import writeMetadataDatetimeToVideo
+from functions.state import errorImages, imagesWithoutMetadataJson, incompatibleFileFormatImages, convertedImages
 
 folder_path = "/home/olof/Downloads/TakeoutTests/takeout1"
 
