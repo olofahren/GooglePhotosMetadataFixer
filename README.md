@@ -25,10 +25,10 @@ This script curretly supports
 
 ## How to use the script
 1. Clone the repository
-2. Enter the repository ``` cd GooglePhotosMetadataFixer ``
+2. Enter the repository ``` cd GooglePhotosMetadataFixer ```
 3. Create a Python venv ```python -m venv path/to/venv```
 4. Enter the venv using ``` source venv/bin/activate```
-5. Install dependencies with ```pip install -r requirements.txt``` (Do this )
+5. Install dependencies with ```pip install -r requirements.txt```
 6. Edit the file path at the top of ``` script.py ``` and run the script. 
 
 
