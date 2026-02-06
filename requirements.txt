@@ -1,0 +1,6 @@
+Pillow
+pillow-heif
+exif
+piexif
+ffmpeg-python
+pytz

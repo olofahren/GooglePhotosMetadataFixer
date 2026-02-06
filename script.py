@@ -7,7 +7,13 @@ from functions.videoFunctions import writeMetadataDatetimeToVideo
 from functions.state import errorImages, imagesWithoutMetadataJson, incompatibleFileFormatImages, convertedImages
 import functions.state
 
+
+# ------------------------------------------------
+## EDIT THIS PATH TO THE FOLDER CONTAINING YOUR GOOGLE TAKEOUT IMAGES AND VIDEOS
 folder_path = "/home/olof/Downloads/TakeoutTests/takeout1"
+##
+# ------------------------------------------------
+
 
 #Main call script
 def writeMetadataToAllImagesInFolder(folder):
