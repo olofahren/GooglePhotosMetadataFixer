@@ -49,7 +49,7 @@ def writeMetadataToAllImagesInFolder(folder):
         print("\n\n\n\n")
 
     if(imagesWithoutMetadataJson):
-        print("The following image files had no metadata JSON file:")
+        print("The following image files had no metadata JSON file. \n These files were set to 1970-01-01 00:00:00 or had year extracted from file path if possible:")
         for imgFile in imagesWithoutMetadataJson:
             print(imgFile)
         print("\n\n\n\n")
@@ -65,13 +65,22 @@ def writeMetadataToAllImagesInFolder(folder):
             print(imgFile)
         print("\n\n\n\n")
     
+    #handle files with errors
     if(errorImages):
-        print("Would you like to move the error files to a subfolder named 'error_files'? (y/n)")
+        print("Some files could not be opened and and no metadata has been wrritten to them. \n Would you like to move the error files to a subfolder named 'error_files'? (y/n)")
         choice = input().strip().lower()
         if choice == 'y':
             for errFile in errorImages:
                 moveFileToSubfolder(errFile, folder_path + "/error_files")
             print("Moved error files to subfolder 'error_files'.")
+
+    if(incompatibleFileFormatImages):
+        print("Would you like to move the incompatible format files to a subfolder named 'incompatible_files'? (y/n)")
+        choice = input().strip().lower()
+        if choice == 'y':
+            for errFile in incompatibleFileFormatImages:
+                moveFileToSubfolder(errFile, folder_path + "/incompatible_files")
+            print("Moved incompatible format files to subfolder 'incompatible_files'.")
     print("All done! Exiting script.")
 
     
