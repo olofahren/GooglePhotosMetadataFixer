@@ -20,7 +20,6 @@ This script curretly supports
 ## Dependencies
 * python
 * pip
-* poetry
 * git
 
 ## How to use the script
